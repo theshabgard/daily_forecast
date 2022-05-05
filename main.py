@@ -102,5 +102,4 @@ if sidebar_function == "Neural Networks":
     fig_param = model.plot_parameters()
     st.pyplot(fig_param)
 figure = px.line(forecast, x='ds', y=['yhat1', 'y'])
-fig.update_traces(secondary_y='y', overwrite=True)
 st.write(figure)
