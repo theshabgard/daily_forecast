@@ -50,7 +50,7 @@ period = n_years
 
 @st.cache
 def load_data(ticker):
-    data = yf.download(ticker, start_date, end_date, interval='1m')
+    data = yf.download(ticker, start_date, end_date, interval='H')
     data.reset_index(inplace=True)
     return data
 
@@ -80,18 +80,17 @@ if sidebar_function == "Neural Networks":
                                         # trend_reg=0,
                                         # trend_reg_threshold=False,
                                         yearly_seasonality=False,
-                                        weekly_seasonality=False,
+                                        weekly_seasonality='auto',
                                         daily_seasonality=8,
                                         seasonality_mode="multiplicative",
                                         epochs=150,
                                         loss_func="Huber",
-                                        normalize="minmax",
+                                        normalize="soft",
                                         impute_missing=True,
                                         num_hidden_layers=3,
                                         d_hidden=1,
                                         batch_size=36)
-    # model.add_seasonality(name='monthly', period=30.5, fourier_order=5)
-    metrics = model.fit(df_train, freq='H', progress='bar')
+    metrics = model.fit(df_train, freq='auto', progress='bar')
     future = model.make_future_dataframe(df_train, periods=period, n_historic_predictions=len(df_train))
     forecast = model.predict(future)
     st.write("Forecast Results")
@@ -102,3 +101,6 @@ if sidebar_function == "Neural Networks":
     st.write(fig_comp)
     fig_param = model.plot_parameters()
     st.pyplot(fig_param)
+figure = px.line(forecast, x='ds', y=['yhat1', 'y'])
+fig.update_traces(secondary_y='y', overwrite=True)
+st.write(figure)
