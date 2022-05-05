@@ -83,13 +83,13 @@ if sidebar_function == "Neural Networks":
                                         weekly_seasonality='auto',
                                         daily_seasonality=8,
                                         seasonality_mode="multiplicative",
-                                        epochs=150,
+                                        epochs=250,
                                         loss_func="Huber",
                                         normalize="soft",
                                         impute_missing=True,
-                                        num_hidden_layers=3,
-                                        d_hidden=1,
-                                        batch_size=36)
+                                        num_hidden_layers=2,
+                                        d_hidden=2,
+                                        batch_size=16)
     metrics = model.fit(df_train, freq='auto', progress='bar')
     future = model.make_future_dataframe(df_train, periods=period, n_historic_predictions=len(df_train))
     forecast = model.predict(future)
